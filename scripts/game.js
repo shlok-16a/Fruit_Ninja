@@ -62,6 +62,15 @@ exports.gameOver = function(){
     //     message.postMessage( "home-menu", "sence.switchSence" );
     // }, 2000);
 
+    var currentScore = scoreNumber;
+    timeline.setTimeout(function(){
+        var scoreVal = document.getElementById("modal-score-value");
+        if (scoreVal) scoreVal.textContent = currentScore;
+        
+        var modal = document.getElementById("game-over-modal");
+        if (modal) modal.style.display = "flex";
+    }, 600);
+
     scoreNumber = 0;
     volleyNum = 2;
     fruits.length = 0;
@@ -136,7 +145,26 @@ message.addEventListener("overWhiteLight.show", function(){
 });
 
 message.addEventListener("click", function(){
+    var modal = document.getElementById("game-over-modal");
+    if (modal && modal.style.display === "flex") {
+        return;
+    }
     state( "click-enable" ).off();
     gameOver.hide();
     message.postMessage( "home-menu", "sence.switchSence" );
 });
+
+// Bind modal back button click
+setTimeout(function() {
+    var backBtn = document.getElementById("modal-back-btn");
+    if (backBtn) {
+        backBtn.onclick = function() {
+            var modal = document.getElementById("game-over-modal");
+            if (modal) modal.style.display = "none";
+            
+            state( "click-enable" ).off();
+            gameOver.hide();
+            message.postMessage( "home-menu", "sence.switchSence" );
+        };
+    }
+}, 0);

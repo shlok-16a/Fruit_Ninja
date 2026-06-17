@@ -1,6 +1,3 @@
-{include ../../system/css/reset.css}
-{include ../../system/css/common.css}
-
 html, body{
 	width: 100%;
 	height: 100%;
@@ -83,4 +80,92 @@ em{
 #browser .b{
 	color: #fff;
 	font-weight: 700;
+}
+
+/* Custom Game Over Modal */
+#game-over-modal {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 640px;
+	height: 480px;
+	margin: -280px auto auto -320px;
+	z-index: 100;
+	background: rgba(0, 0, 0, 0.65);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.game-over-card {
+	background: rgba(45, 30, 20, 0.9);
+	border: 2px solid #af7c05;
+	border-radius: 24px;
+	width: 300px;
+	padding: 30px;
+	text-align: center;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+	animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+	0% {
+		transform: scale(0.7);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.game-over-title {
+	font-size: 32px;
+	font-weight: 900;
+	color: #fff;
+	margin: 0 0 10px 0;
+	letter-spacing: 2px;
+	text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.score-label {
+	font-size: 18px;
+	color: #ccc;
+	margin-bottom: 5px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.score-value {
+	font-size: 64px;
+	font-weight: bold;
+	color: #ffec53;
+	margin-bottom: 25px;
+	text-shadow: 0 4px 10px rgba(255, 236, 83, 0.3);
+}
+
+.modal-btn {
+	background: #318fe1;
+	color: #fff;
+	border: none;
+	border-radius: 50px;
+	padding: 12px 35px;
+	font-size: 16px;
+	font-weight: 700;
+	cursor: pointer;
+	box-shadow: 0 4px 15px rgba(49, 143, 225, 0.4);
+	transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.modal-btn:hover {
+	background: #429eed;
+	transform: scale(1.05);
+	box-shadow: 0 6px 20px rgba(49, 143, 225, 0.6);
+}
+
+.modal-btn:active {
+	transform: scale(0.98);
 }

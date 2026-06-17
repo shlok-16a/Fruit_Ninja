@@ -1,4 +1,4 @@
-﻿/**
+/**
  * this file was compiled by jsbuild 0.9.6
  * @date Mon, 16 Jul 2012 18:46:47 UTC
  * @author dron
@@ -237,6 +237,15 @@ define("scripts/game.js", function(exports){
 	    //     message.postMessage( "home-menu", "sence.switchSence" );
 	    // }, 2000);
 	
+	    var currentScore = scoreNumber;
+	    timeline.setTimeout(function(){
+	        var scoreVal = document.getElementById("modal-score-value");
+	        if (scoreVal) scoreVal.textContent = currentScore;
+	        
+	        var modal = document.getElementById("game-over-modal");
+	        if (modal) modal.style.display = "flex";
+	    }, 600);
+	
 	    scoreNumber = 0;
 	    volleyNum = 2;
 	    fruits.length = 0;
@@ -307,10 +316,29 @@ define("scripts/game.js", function(exports){
 	});
 	
 	message.addEventListener("click", function(){
+	    var modal = document.getElementById("game-over-modal");
+	    if (modal && modal.style.display === "flex") {
+	        return;
+	    }
 	    state( "click-enable" ).off();
 	    gameOver.hide();
 	    message.postMessage( "home-menu", "sence.switchSence" );
-	});;
+	});
+	
+	// Bind modal back button click
+	setTimeout(function() {
+	    var backBtn = document.getElementById("modal-back-btn");
+	    if (backBtn) {
+	        backBtn.onclick = function() {
+	            var modal = document.getElementById("game-over-modal");
+	            if (modal) modal.style.display = "none";
+	            
+	            state( "click-enable" ).off();
+	            gameOver.hide();
+	            message.postMessage( "home-menu", "sence.switchSence" );
+	        };
+	    }
+	}, 0);;
 
 	return exports;
 });
@@ -418,13 +446,13 @@ define("scripts/main.js", function(exports){
 	
 	    [ timeline, sence, control ].invoke( "init" );
 	
-	    log( "正在加载鼠标控制脚本" );
-	    log( "正在加载图像资源" );
-		log( "正在加载游戏脚本" );
-	    log( "正在加载剧情" );
-	    log( "正在初始化" );
-		log( "正在启动游戏..." );
-	    log.clear();
+	    // log( "正在加载鼠标控制脚本" );
+	    // log( "正在加载图像资源" );
+		// log( "正在加载游戏脚本" );
+	    // log( "正在加载剧情" );
+	    // log( "正在初始化" );
+		// log( "正在启动游戏..." );
+	    // log.clear();
 	
 	    setTimeout( sence.switchSence.saturate( sence, "home-menu" ), 3000 );
 	};
@@ -571,8 +599,8 @@ define("scripts/sence.js", function(exports){
 	exports.init = function(){
 	    menuSnd = sound.create( "sound/menu" );
 	    gameStartSnd = sound.create( "sound/start" );
-		[ background, homeMask, logo, ninja, homeDesc, dojo, newSign, newGame, quit, score, lose, developing, gameOver, flash, fps ].invoke( "set" );
-	    setInterval( fps.update.bind( fps ), 500 );
+		[ background, homeMask, logo, ninja, homeDesc, dojo, newSign, newGame, quit, score, lose, developing, gameOver, flash /*, fps */ ].invoke( "set" );
+	    // setInterval( fps.update.bind( fps ), 500 );
 	};
 	
 	// switch sence
@@ -616,12 +644,14 @@ define("scripts/sence.js", function(exports){
 	    var callee = arguments.callee;
 	    var times = callee.times = ++ callee.times || 1;
 	
-	    peach = fruit.create( "peach", 137, 333, true );
+	    // peach = fruit.create( "peach", 137, 333, true );
 	    sandia = fruit.create( "sandia", 330, 322, true );
-	    boom = fruit.create( "boom", 552, 367, true, 2500 );
+	    // boom = fruit.create( "boom", 552, 367, true, 2500 );
 	
-	    [ peach, sandia, boom ].forEach(function( f ){ f.isHomeMenu = 1; });
-	    peach.isDojoIcon = sandia.isNewGameIcon = boom.isQuitIcon = 1;
+	    [ /* peach, */ sandia /*, boom */ ].forEach(function( f ){ f.isHomeMenu = 1; });
+	    // peach.isDojoIcon = 
+	    sandia.isNewGameIcon = 1;
+	    // boom.isQuitIcon = 1;
 	
 	    var group = [
 	    	[ homeMask, 0 ], 
@@ -630,19 +660,19 @@ define("scripts/sence.js", function(exports){
 	    	[ ninja, 500 ], 
 	    	[ homeDesc, 1500 ], 
 	
-	    	[ dojo, 2000 ], 
+	    	// [ dojo, 2000 ], 
 	    	[ newGame, 2000 ], 
-	    	[ quit, 2000 ],
+	    	// [ quit, 2000 ],
 	        
 	        [ newSign, 2000 ],
 	
-	        [ peach, 2000 ],
-	        [ sandia, 2000 ],
-	        [ boom, 2000 ]
+	        // [ peach, 2000 ],
+	        [ sandia, 2000 ]
+	        // [ boom, 2000 ]
 	    ];
 	
 	    group.invoke( "show" );
-	    [ peach, sandia ].invoke( "rotate", 2500 );
+	    [ /* peach, */ sandia ].invoke( "rotate", 2500 );
 	
 	    menuSnd.play();
 	    setTimeout( callback, 2500 );
@@ -650,9 +680,9 @@ define("scripts/sence.js", function(exports){
 	
 	// to exit home page menu
 	exports.hideMenu = function( callback ){
-	    [ newSign, dojo, newGame, quit ].invoke( "hide" );
+	    [ newSign, /* dojo, */ newGame /*, quit */ ].invoke( "hide" );
 	    [ homeMask, logo, ninja, homeDesc ].invoke( "hide" );
-	    [ peach, sandia, boom ].invoke( "fallOff", 150 );
+	    [ /* peach, */ sandia /*, boom */ ].invoke( "fallOff", 150 );
 	
 	    menuSnd.stop();
 	    setTimeout( callback, fruit.getDropTimeSetting() );
@@ -4860,7 +4890,7 @@ define("scripts/object/score.js", function(exports){
 	exports.set = function(){
 	    image = layer.createImage( "default", "images/score.png", imageSx, 8, 29, 31 ).hide();
 	    text1 = layer.createText( "default", "0", text1Sx, 24, "90-#fc7f0c-#ffec53", "30px" ).hide();
-	    text2 = layer.createText( "default", "BEST 999", text2Sx, 48, "#af7c05", "14px" ).hide();
+	    text2 = layer.createText( "default", "", text2Sx, 48, "#af7c05", "14px" ).hide();
 	};
 	
 	exports.show = function( start ){
